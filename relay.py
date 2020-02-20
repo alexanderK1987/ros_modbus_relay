@@ -2,7 +2,7 @@ import rospy
 import re
 from std_msgs.msg import String
 from pymodbus.client.sync import ModbusTcpClient as MbClient
-import theading
+import threading
 import time
 
 NODE_NAME = 'ROS_MODBUS_RELAY'
