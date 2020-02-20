@@ -6,7 +6,7 @@ If the message is a read command, the service publish the modbus response to ROS
 
 # Protocol Data Format
 ## Read registers
-The read command must follow the format:
+The read commands must follow the following format:
 
 `READ [register address] COUNT [# of registers]`
 
@@ -19,5 +19,11 @@ If the read command is issued successfully, the response is then publish to `/mo
 `[1, 2341, 1, 3122]`
 
 ## Write registers
+The write commands must follow the following format:
+
+`WRITE [register address] COUNT [# of regiser] [list of unsigned-16-bit integer (uint_16[])]`
+
+For example:
+
 `WRITE 0x1620 COUNT 3 [1, 100, 200]`
 
