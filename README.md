@@ -5,6 +5,12 @@ This service should be run after the main ROS application is launched.
 This service subscribes to ROS topic `/modbus_tcp_cmd` and detects incomming commands.
 If the incomming message is a read command, the service publishs the modbus response to ROS topic `/modbus_tcp_data`.
 
+# Requirements
+This service requires `rospy`, `pymodbus` to run.
+The installation command should be:
+
+`sudo pip install -r requirements.txt`
+
 # Protocol Data Format
 ## Read registers
 The read commands must follow the following format:
