@@ -1,8 +1,9 @@
 # ROS-Modbus TCP Relay Service
 A dedicated service that take modbus command from ROS to modbusTCP.
-Should be run after the main ROS application is launched.
-This service subscribes to ROS topic `/modbus_tcp_cmd` and detect for incomming commands.
-If the message is a read command, the service publish the modbus response to ROS topic `/modbus_tcp_data`.
+This service should be run after the main ROS application is launched.
+
+This service subscribes to ROS topic `/modbus_tcp_cmd` and detects incomming commands.
+If the incomming message is a read command, the service publishs the modbus response to ROS topic `/modbus_tcp_data`.
 
 # Protocol Data Format
 ## Read registers
