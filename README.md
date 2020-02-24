@@ -34,5 +34,5 @@ The write commands must follow the following format:
 
 For example:
 
- - `WRITE 0x1620 COUNT 3 [1, 100, 200]`
+ - `WRITE 0x1620 COUNT 3 1 100 200`
 

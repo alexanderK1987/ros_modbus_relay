@@ -8,7 +8,7 @@ import time
 NODE_NAME = 'ROS_MODBUS_RELAY'
 PUB_TOPIC = 'modbus_tcp_data'
 SUB_TOPIC = 'modbus_tcp_cmd'
-CMD_PATTERN = '(READ|WRITE)\s+(\w+)\s+(COUNT)\s+(\w+)(\s*\[[\w|\W]*\]){0,1}'
+CMD_PATTERN = '(READ|WRITE)\s+(\w+)\s+(COUNT)\s+(\w+)(\s*[\w|\W]*){0,1}'
 MODBUS_HOST = '192.168.10.30'
 MODBUS_PORT = 502
 MODBUS_TIMEOUT = 7e-3
