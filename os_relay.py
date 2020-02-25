@@ -86,7 +86,7 @@ class HbChecker():
             try:
                 time.sleep(self.TIMEOUT)
                 topic = rostopic.get_topic_class('/modbus_tcp_cmd')
-                self.ros_alive = False if topicp[0] == None else True
+                self.ros_alive = False if topic[0] == None else True
             except:
                 self.ros_alive = False
     
