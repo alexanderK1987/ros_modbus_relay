@@ -26,11 +26,20 @@ class msg_handler():
     def start(self):
         while self.kill == False:
             data = self.proc.stdout.readline()
+            if not data:
+                break
+
             if data.startswith("data:"):
                 self.process(data.split('"')[1])
 
+    def stop(self):
+        if not self.kill:
+            print ('unsubscribing')
+            self.kill = True
+            self.proc.kill()
+
     def process(self, line):
-        print (line)
+        print ('recv: %s' % line)
         m = self.prog.match(line)
         if m == None:
             print ('invalid command %s' % line)
@@ -77,46 +86,37 @@ class HbChecker():
             try:
                 time.sleep(self.TIMEOUT)
                 topic = rostopic.get_topic_class('/modbus_tcp_cmd')
-                if topic[0] == None:
-                    self.ros_alive = False
-                else:
-                    self.ros_alive = True
+                self.ros_alive = False if topicp[0] == None else True
             except:
                 self.ros_alive = False
     
 if __name__  == '__main__':
-    handler = None
     client = MbClient(MODBUS_HOST, port=MODBUS_PORT, timeout=MODBUS_TIMEOUT)
     client.connect()
     hbc = HbChecker()
-    KILL = False
     mh = None
-    while not KILL:
+    while True:
         try:
-            while hbc.ros_alive == False and (KILL == False):
+            while not hbc.ros_alive:
                 print ('reconnecting')
-                if mh != None:
-                    mh.kill = True
-
+                if mh != None and mh.kill == False:
+                    mh.stop()
                 time.sleep(hbc.TIMEOUT)
         except KeyboardInterrupt:
-            print ('SIGTERM.')
-            hbc.kill = True
-            KILL = True
-        if not KILL:
-            mh = msg_handler(client)
+            break
+
+        print ('ok!')
+        mh = msg_handler(client)
+
         try:
-            while hbc.ros_alive and (KILL == False):
+            while hbc.ros_alive:
                 time.sleep(hbc.TIMEOUT)
-
         except KeyboardInterrupt:
-            print ('SIGTERM.')
-            hbc.kill = True
-            KILL = True
             break
 
     print ('Terminating')
+    hbc.kill = True
     if mh != None:
-        mh.kill = True
+        mh.stop()
     client.close()
 
