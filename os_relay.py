@@ -22,7 +22,6 @@ class msg_handler():
         self.kill = False
         self.t_thread.setDaemon(True)
         self.t_thread.start()
-        self.__agv_stop__ = True
 
     def start(self):
         while self.kill == False:
@@ -51,13 +50,7 @@ class msg_handler():
             values = map(eval, m.group(5).split())
             values = [v&0x0000ffff for v in values]
             if (values[1] == 0) and (values[2] == 0): 
-                if (not self.__agv_stop__):
-                    self.__agv_stop__ = True
-                    values[0] = 2
-                else:
-                    return
-            else:
-                self.__agv_stop__ = False
+                values[0] = 2
             if len(values) != count:
                 print ('incorret amount of data')
                 return
