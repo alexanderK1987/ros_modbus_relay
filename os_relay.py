@@ -22,6 +22,7 @@ class msg_handler():
         self.kill = False
         self.t_thread.setDaemon(True)
         self.t_thread.start()
+        self.__agv_stop__ = True
 
     def start(self):
         while self.kill == False:
@@ -31,6 +32,7 @@ class msg_handler():
 
             if data.startswith("data:"):
                 self.process(data.split('"')[1])
+            time.sleep(1e-3)
 
     def stop(self):
         if not self.kill:
@@ -39,7 +41,7 @@ class msg_handler():
             self.proc.kill()
 
     def process(self, line):
-        print ('recv: %s' % line)
+        #print ('recv: %s' % line)
         m = self.prog.match(line)
         if m == None:
             print ('invalid command %s' % line)
@@ -48,8 +50,14 @@ class msg_handler():
         if cmd == 'WRITE':
             values = map(eval, m.group(5).split())
             values = [v&0x0000ffff for v in values]
-            if (values[1] == 0) and (values[2] == 0):
-                values[0] = 2
+            if (values[1] == 0) and (values[2] == 0): 
+                if (not self.__agv_stop__):
+                    self.__agv_stop__ = True
+                    values[0] = 2
+                else:
+                    return
+            else:
+                self.__agv_stop__ = False
             if len(values) != count:
                 print ('incorret amount of data')
                 return
@@ -105,7 +113,7 @@ if __name__  == '__main__':
         except KeyboardInterrupt:
             break
 
-        print ('ok!')
+        #print ('ok!')
         mh = msg_handler(client)
 
         try:
